@@ -1,6 +1,6 @@
 import { migrate } from 'drizzle-orm/bun-sqlite/migrator'
 import { drizzle } from 'drizzle-orm/bun-sqlite'
-import { eq } from 'drizzle-orm'
+import { eq, or } from 'drizzle-orm'
 import { Database } from 'bun:sqlite'
 import * as schema from './schema'
 
@@ -23,7 +23,9 @@ export const addUser = async (data: NewUser) => {
 }
 
 export const getUser = async (email: string) => {
-	return await db.query.user.findFirst({ where: eq(user.email, email) })
+	return await db.query.user.findFirst({
+		where: or(eq(user.email, email), eq(user.id, email)),
+	})
 }
 
 export const upadateUser = async (id: string, data: Partial<NewUser>) => {
