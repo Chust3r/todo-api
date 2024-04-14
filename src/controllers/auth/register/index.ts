@@ -1,5 +1,6 @@
 import { Elysia, t } from 'elysia'
-import { addUser, getUser } from '@/db/db'
+import { addEmailVerificationToken, addUser, getUser } from '@/db/db'
+import { resend } from '@/libs/resend'
 
 // → BODY SCHEMA
 
@@ -35,6 +36,19 @@ export const register = new Elysia().post(
 			await addUser({
 				email,
 				password: hash,
+			})
+
+			const token = crypto.randomUUID()
+
+			const data = await getUser(email)
+
+			await addEmailVerificationToken(token, data?.id as string)
+
+			await resend.emails.send({
+				from: 'Acme <onboarding@resend.dev>',
+				to: [email],
+				subject: 'Todo - Verify your email',
+				html: `Verify your email <a href="http://localhost:3000/auth/email/verify?token=${token}">here</a>`,
 			})
 
 			return Response.json(undefined, { status: 200 })

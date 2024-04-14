@@ -1,31 +1,32 @@
 {
-	"name": "@bun-examples/elysia",
-	"version": "1.0.50",
-	"type": "module",
-	"scripts": {
-		"dev": "bun --watch src/index.ts",
-		"build": "bun build src/index.ts",
-		"start": "NODE_ENV=production bun src/index.ts",
-		"test": "bun test",
-		"db:migrate": "bun drizzle-kit generate:sqlite",
-		"db:push": "bun drizzle-kit push:sqlite"
-	},
-	"dependencies": {
-		"@elysiajs/jwt": "^1.0.2",
-		"@types/uuid": "^9.0.8",
-		"better-sqlite3": "^9.5.0",
-		"elysia": "latest",
-		"uuid": "^9.0.1"
-	},
-	"devDependencies": {
-		"add": "^2.0.6",
-		"bun": "^1.1.2",
-		"bun-types": "latest",
-		"drizzle-kit": "^0.20.14",
-		"drizzle-orm": "^0.30.7"
-	},
-	"module": "src/index.js",
-	"bun-create": {
-		"start": "bun run src/index.ts"
-	}
+  "name": "@bun-examples/elysia",
+  "version": "1.0.50",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts",
+    "start": "NODE_ENV=production bun src/index.ts",
+    "test": "bun test",
+    "db:migrate": "bun drizzle-kit generate:sqlite",
+    "db:push": "bun drizzle-kit push:sqlite"
+  },
+  "dependencies": {
+    "@elysiajs/jwt": "^1.0.2",
+    "@types/uuid": "^9.0.8",
+    "better-sqlite3": "^9.5.0",
+    "elysia": "latest",
+    "resend": "^3.2.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "add": "^2.0.6",
+    "bun": "^1.1.2",
+    "bun-types": "latest",
+    "drizzle-kit": "^0.20.14",
+    "drizzle-orm": "^0.30.7"
+  },
+  "module": "src/index.js",
+  "bun-create": {
+    "start": "bun run src/index.ts"
+  }
 }
