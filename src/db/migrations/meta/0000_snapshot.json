@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "95f12786-d808-4500-b101-580587eeed52",
+  "id": "bc1ebe96-9611-4e47-aaeb-73194622e842",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "users": {
@@ -59,7 +59,7 @@
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false,
-          "default": "'20d673f3-d5ba-44e2-b4d0-a324dd36d808'"
+          "default": "'f4eda053-bd76-4241-8e70-6e070d8d25fa'"
         },
         "token": {
           "name": "token",
@@ -72,7 +72,7 @@
           "name": "user_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "created_at": {
@@ -81,7 +81,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 1713060317320
+          "default": 1713577277526
         },
         "expires_at": {
           "name": "expires_at",
@@ -89,7 +89,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 1713146717320
+          "default": 1713663677526
         }
       },
       "indexes": {},
@@ -104,7 +104,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
+          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },

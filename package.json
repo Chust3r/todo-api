@@ -8,7 +8,8 @@
     "start": "NODE_ENV=production bun src/index.ts",
     "test": "bun test",
     "db:migrate": "bun drizzle-kit generate:sqlite",
-    "db:push": "bun drizzle-kit push:sqlite"
+    "db:push": "bun drizzle-kit push:sqlite",
+    "db:drop": "bun drizzle-kit drop"
   },
   "dependencies": {
     "@elysiajs/jwt": "^1.0.2",
@@ -22,7 +23,7 @@
     "add": "^2.0.6",
     "bun": "^1.1.2",
     "bun-types": "latest",
-    "drizzle-kit": "^0.20.14",
+    "drizzle-kit": "^0.20.16",
     "drizzle-orm": "^0.30.7"
   },
   "module": "src/index.js",

@@ -1,7 +1,10 @@
 import { Elysia, t } from 'elysia'
-import { getUser } from '@db/db'
 import { jwt, refresh } from '@libs/jwt'
 import { cookie } from '@schemas/request'
+
+// → DATABASE
+
+import { db } from '@db'
 
 // → SCHEMA
 
@@ -22,7 +25,9 @@ export const login = new Elysia()
 		'/login',
 		async ({ body, jwt, refresh, cookie }) => {
 			try {
-				const user = await getUser(body.email)
+				const user = await db.query.users.findFirst({
+					where: (users, { eq }) => eq(users.email, body.email),
+				})
 
 				if (!user) {
 					return Response.json(undefined, { status: 401 })

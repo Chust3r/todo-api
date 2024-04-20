@@ -108,7 +108,7 @@
 			"@libs/*": ["./src/libs/*"],
 			"@schemas/*": ["./src/schemas/*"],
 			"@middlewares/*": ["./src/middlewares/*"],
-			"@db/*": ["./src/db/*"]
+			"@db": ["./src/db/db.ts"]
 		}
 	}
 }

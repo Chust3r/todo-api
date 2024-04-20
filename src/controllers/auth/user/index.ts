@@ -2,7 +2,10 @@ import { Elysia } from 'elysia'
 import { authMiddleware } from '@middlewares/auth'
 import { cookie } from '@schemas/request'
 import { jwt } from '@libs/jwt'
-import { getUser } from '@db/db'
+
+// → DATABASE
+
+import { db } from '@db'
 
 const schema = {
 	cookie,
@@ -23,7 +26,9 @@ export const user = new Elysia()
 					return Response.json(undefined, { status: 401 })
 				}
 
-				const user = await getUser(payload.id as string)
+				const user = await db.query.users.findFirst({
+					where: (users, { eq }) => eq(users.id, payload?.id as string),
+				})
 
 				return Response.json({
 					...user,

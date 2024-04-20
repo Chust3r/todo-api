@@ -1,6 +1,9 @@
 import { Elysia, t } from 'elysia'
-import { addEmailVerificationToken, addUser, getUser } from '@/db/db'
 import { resend } from '@/libs/resend'
+
+// → DATABASE
+
+import { db, users, verificationToken as vToken } from '@db'
 
 // → BODY SCHEMA
 
@@ -19,9 +22,11 @@ export const register = new Elysia().post(
 		try {
 			const { email, password } = body
 
-			const user = await getUser(email)
+			const exists = await db.query.users.findFirst({
+				where: (users, { eq }) => eq(users.email, email),
+			})
 
-			if (user) {
+			if (exists) {
 				return Response.json(undefined, {
 					status: 409,
 				})
@@ -33,22 +38,26 @@ export const register = new Elysia().post(
 				timeCost: 3,
 			})
 
-			await addUser({
-				email,
-				password: hash,
-			})
+			const user = await db
+				.insert(users)
+				.values({
+					email,
+					password: hash,
+				})
+				.returning()
 
 			const token = crypto.randomUUID()
 
-			const data = await getUser(email)
-
-			await addEmailVerificationToken(token, data?.id as string)
+			await db.insert(vToken).values({
+				userId: user[0].id,
+				token,
+			})
 
 			await resend.emails.send({
-				from: 'Acme <onboarding@resend.dev>',
+				from: 'Todofy <onboarding@resend.dev>',
 				to: [email],
-				subject: 'Todo - Verify your email',
-				html: `Verify your email <a href="http://localhost:3000/auth/email/verify?token=${token}">here</a>`,
+				subject: 'Todofy - Verify your email',
+				html: `Please verify your email <a href="http://localhost:3000/auth/email/verify?token=${token}">here</a>`,
 			})
 
 			return Response.json(undefined, { status: 200 })

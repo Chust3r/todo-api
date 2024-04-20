@@ -1,9 +1,11 @@
-import type Elysia from 'elysia'
+import { Elysia } from 'elysia'
+import { cookie } from '@schemas/request'
+import { authMiddleware } from '@middlewares/auth'
 
-export const update = (app: Elysia) => {
-	return app.get('/update', () => {
-		return Response.json({
-			message: 'AUTH PASSWORD UPDATE',
-		})
-	})
-}
+export const update = new Elysia().post('/update', async () => {
+	try {
+		return Response.json(undefined, { status: 200 })
+	} catch (e) {
+		console.log('[AUTH] PASSWORD UPDATE ERROR')
+	}
+})

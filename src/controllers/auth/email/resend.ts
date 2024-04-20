@@ -3,11 +3,11 @@ import { jwt } from '@libs/jwt'
 import { authMiddleware } from '@middlewares/auth'
 import { cookie } from '@schemas/request'
 import { resend } from '@libs/resend'
-import {
-	deleteEmailVerificationToken,
-	addEmailVerificationToken,
-	getUser,
-} from '@db/db'
+
+// → DATABASE
+
+import { db, verificationToken as vToken } from '@db'
+import { eq } from 'drizzle-orm'
 
 const schema = {
 	cookie,
@@ -28,17 +28,24 @@ export const resendEmail = new Elysia()
 
 				// → CHECK USER
 
-				const user = await getUser(payload?.email as string)
+				const user = await db.query.users.findFirst({
+					where: (users, { eq }) => eq(users.id, payload?.id as string),
+				})
 
 				if (user?.emailVerified) {
 					return Response.json(undefined, { status: 401 })
 				}
 
-				await deleteEmailVerificationToken(payload?.id as string)
+				await db
+					.delete(vToken)
+					.where(eq(vToken.token, payload?.token as string))
 
 				const token = crypto.randomUUID()
 
-				await addEmailVerificationToken(payload?.id as string, token)
+				await db.insert(vToken).values({
+					userId: payload?.id as string,
+					token,
+				})
 
 				await resend.emails.send({
 					from: 'Acme <onboarding@resend.dev>',

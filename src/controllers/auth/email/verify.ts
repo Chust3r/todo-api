@@ -1,9 +1,11 @@
-import {
-	getEmailVerificationToken,
-	upadateUser,
-	deleteEmailVerificationToken,
-} from '@db/db'
 import { Elysia, t } from 'elysia'
+
+// → DATABASE
+
+import { db, users, verificationToken as vToken } from '@db'
+import { eq } from 'drizzle-orm'
+
+// → SCHEMA
 
 const query = t.Object({
 	token: t.String(),
@@ -19,7 +21,9 @@ export const verifyEmail = new Elysia().get(
 		try {
 			const { token } = query
 
-			const verificationToken = await getEmailVerificationToken(token)
+			const verificationToken = await db.query.verificationToken.findFirst({
+				where: (tokens, { eq }) => eq(tokens.token, token),
+			})
 
 			if (!verificationToken) {
 				return Response.json(undefined, { status: 404 })
@@ -31,9 +35,12 @@ export const verifyEmail = new Elysia().get(
 				return Response.json(undefined, { status: 400 })
 			}
 
-			await upadateUser(userId, { emailVerified: true })
+			await db
+				.update(users)
+				.set({ emailVerified: true })
+				.where(eq(users.id, userId as string))
 
-			await deleteEmailVerificationToken(token)
+			await db.delete(vToken).where(eq(vToken.token, token))
 
 			return Response.json(undefined, { status: 200 })
 		} catch (e) {
