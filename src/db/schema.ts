@@ -26,5 +26,18 @@ export const verificationToken = sqliteTable('verification_tokens', {
 	createdAt: integer('created_at').notNull().default(Date.now()),
 	expiresAt: integer('expires_at')
 		.notNull()
-		.default(Date.now() + 1000 * 60 * 60 * 24),
+		.default(Date.now() + 1000 * 60 * 60),
+})
+
+export const resetPasswordTokens = sqliteTable('reset_password_tokens', {
+	id: text('id').notNull().primaryKey().default(v4()),
+	token: text('token').notNull(),
+	createdAt: integer('created_at').notNull().default(Date.now()),
+	expiresAt: integer('expires_at')
+		.notNull()
+		.default(Date.now() + 1000 * 60 * 60),
+	email: text('email')
+		.notNull()
+		.unique()
+		.references(() => users.email),
 })

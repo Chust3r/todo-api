@@ -1,11 +1,11 @@
-import Elysia from 'elysia'
+import { Elysia } from 'elysia'
 
 // → PASSWORD SERVICES
 
 import { update } from './update'
 import { reset } from './reset'
-import { resetEmail } from './reset-email'
+import { resetToken } from './reset-token'
 
 export const password = new Elysia().group('/password', (app) => {
-	return app.use(update).use(reset).use(resetEmail)
+	return app.use(reset).use(resetToken).use(update)
 })

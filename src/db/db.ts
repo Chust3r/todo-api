@@ -8,4 +8,8 @@ const sqlite = new Database('db.sqlite')
 export const db = drizzle(sqlite, { schema })
 export * from './schema'
 
-migrate(db, { migrationsFolder: 'src/db/migrations' })
+try {
+	migrate(db, { migrationsFolder: 'src/db/migrations' })
+} catch (e) {
+	console.log('DB is already migrated')
+}
